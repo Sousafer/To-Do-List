@@ -1,26 +1,59 @@
-import React from "react";
-
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
+import React, { useState } from "react";
+import TodoForm from "./TodoForm";
+import TodoItem from "./TodoItem";
 //create your first component
 const Home = () => {
+	const [todos, setTodos] = useState([]);
+
+	const addTodo = (text) => {
+	  let id = 1;
+	  if(todos.length > 0) {
+		id = todos[0].id + 1
+	  }
+	  let todo = {id: id, text: text, completed: false, important: false}
+	  let newTodos = [todo, ...todos]
+	  setTodos(newTodos)
+	};
+  
+	const removeTodo = (id) => {
+	  let updatedTodos = [...todos].filter((todo) => todo.id !== id);
+	  setTodos(updatedTodos);
+	};
+  
+	const completeTodo = (id) => {
+	  let updatedTodos = todos.map((todo) => {
+		if(todo.id === id) {
+		  todo.completed = !todo.completed
+		}
+		return todo
+	  })
+	  setTodos(updatedTodos)
+	}
+  
+	const importantTodo = (id) => {
+	  let updatedTodos = todos.map((todo) => {
+		if(todo.id === id) {
+		  todo.important = !todo.important
+		}
+		return todo
+	  })
+  
+	  setTodos(updatedTodos)
+	}
+	let sortedTodos = todos.sort((a, b) => b.important - a.important)
 	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
+	  <div className="todo-app">
+		<h1>Todo List</h1>
+		<TodoForm addTodo={addTodo} />
+		<hr className="seperator"/>
+		{sortedTodos.map((todo) => {
+		  return (
+			<TodoItem removeTodo={removeTodo} completeTodo={completeTodo} importantTodo={importantTodo} todo={todo} key={todo.id}/>
+		  )
+		})}
+	  </div>
 	);
-};
+  }
+  
 
 export default Home;
