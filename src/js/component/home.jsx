@@ -30,16 +30,6 @@ const Home = () => {
 	  setTodos(updatedTodos)
 	}
   
-	const importantTodo = (id) => {
-	  let updatedTodos = todos.map((todo) => {
-		if(todo.id === id) {
-		  todo.important = !todo.important
-		}
-		return todo
-	  })
-  
-	  setTodos(updatedTodos)
-	}
 	let sortedTodos = todos.sort((a, b) => b.important - a.important)
 	return (
 	  <div className="todo-app">
